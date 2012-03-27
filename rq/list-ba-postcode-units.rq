@@ -1,0 +1,21 @@
+# This query will extract all postcode units in the BA postcode area
+#
+# As described in Wikipedia, the BA area includes more than just Bath
+#
+# http://en.wikipedia.org/wiki/BA_postcode_area
+#
+# So the area includes Bath, Bradford on Avon, Bruton, Castle Cary, Frome, 
+# Glastonbury, Radstock, Shepton Mallet, Street, Templecombe, Trowbridge, 
+# Warminster, Wells, Westbury, Wincanton and Yeovil
+#
+PREFIX po: <http://data.ordnancesurvey.co.uk/ontology/postcode/>
+PREFIX spatial: <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+SELECT ?id ?code ?latitude ?longitude WHERE {
+  ?id a po:PostcodeUnit;
+     spatial:within <http://data.ordnancesurvey.co.uk/id/postcodearea/BA>;
+     geo:lat ?latitude;
+     geo:long ?longitude;
+     skos:notation ?code.
+}
