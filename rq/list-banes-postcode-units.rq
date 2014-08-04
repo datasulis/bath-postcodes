@@ -1,0 +1,19 @@
+# This query will extract all postcode units in the BA1 & BA2 postcode districts
+#
+# As described in Wikipedia, Bath postcodes are limited to just those districts
+#
+# http://en.wikipedia.org/wiki/BA_postcode_area
+#
+PREFIX po: <http://data.ordnancesurvey.co.uk/ontology/postcode/>
+PREFIX spatial: <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+SELECT ?uri ?postcode ?latitude ?longitude ?ward_uri ?ward_name WHERE {
+  ?uri po:district <http://data.ordnancesurvey.co.uk/id/7000000000025554>;
+      a po:PostcodeUnit;
+	  geo:lat ?latitude;
+	  geo:long ?longitude;
+	  skos:notation ?postcode;
+	  po:ward ?ward_uri.
+  ?ward_uri skos:prefLabel ?ward_name
+}

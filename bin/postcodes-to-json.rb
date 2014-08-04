@@ -5,23 +5,26 @@ require 'cgi'
 
 dir = File.dirname(__FILE__)
 
-query = File.read( File.join(dir, "..", "rq", "list-bath-postcode-units.rq") )
+query = File.read( File.join(dir, "..", "rq", "list-banes-postcode-units.rq") )
 
-Net::HTTP.start('api.talis.com') do |http|
-  req = Net::HTTP::Get.new("/stores/ordnance-survey/services/sparql?output=json&query=#{CGI.escape(query)}") 
+Net::HTTP.start('data.ordnancesurvey.co.uk') do |http|
+  req = Net::HTTP::Get.new("/datasets/os-linked-data/apis/sparql?output=json&query=#{CGI.escape(query)}") 
   response = http.request(req)
   postcodes = JSON.parse( response.body )
   output = {
     "postcodes" => {}
   }
   postcodes["results"]["bindings"].each do |postcode|
-    output["postcodes"][ [ postcode["code"]["value"] ] ] = {
-      "id" => postcode["id"]["value"], 
+    output["postcodes"][ postcode["postcode"]["value"].gsub(" ", "") ] = {      
+      "code" => postcode["postcode"]["value"],
+      "uri" => postcode["uri"]["value"], 
       "latitude" => postcode["latitude"]["value"], 
-      "longitude" => postcode["longitude"]["value"]
+      "longitude" => postcode["longitude"]["value"],
+      "ward_uri" => postcode["ward_uri"]["value"],
+      "ward_name" => postcode["ward_name"]["value"]        
     }
   end
-  File.open( File.join(dir, "..", "data", "bath-postcodes.json"), "w") do |file|
+  File.open( File.join(dir, "..", "data", "banes-postcodes.json"), "w") do |file|
     file.puts JSON.pretty_generate(output)
   end
 end
