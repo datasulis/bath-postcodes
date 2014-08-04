@@ -12,14 +12,16 @@ Net::HTTP.start('data.ordnancesurvey.co.uk') do |http|
   response = http.request(req)
   postcodes = JSON.parse( response.body )
   output = {
-    "postcodes" => {}
+    "postcodes" => []
   }
   postcodes["results"]["bindings"].each do |postcode|
-    output["postcodes"][ postcode["postcode"]["value"].gsub(" ", "") ] = {      
-      "code" => postcode["postcode"]["value"],
-      "uri" => postcode["uri"]["value"], 
-      "latitude" => postcode["latitude"]["value"], 
-      "longitude" => postcode["longitude"]["value"],
+    output["postcodes"] << {      
+      "postcode" => postcode["postcode"]["value"],
+      "uri" => postcode["uri"]["value"],
+      "centroid" => {
+        "latitude" => postcode["latitude"]["value"], 
+        "longitude" => postcode["longitude"]["value"],        
+      },
       "ward_uri" => postcode["ward_uri"]["value"],
       "ward_name" => postcode["ward_name"]["value"]        
     }
