@@ -1,0 +1,14 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    hashie (3.2.0)
+    json (1.8.1)
+    soda-ruby (0.2.12)
+      hashie
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  json
+  soda-ruby
